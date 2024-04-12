@@ -1,0 +1,30 @@
+/*
+ * Copyright (c) 2022 Mr. Green's Workshop https://www.MrGreensWorkshop.com
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ */
+{
+    //"cortex-debug.openocdPath": "${env:HOME}/openocd/src/openocd",
+    // - Settings below are only needed for freestanding applications.
+    // - For workspace applications, you should comment out these lines.
+    // - Please comment out ZEPHYR_EXTRA_MODULES if your application does not have Zephyr modules.
+    // (In the example-application, Zephyr modules were used.)
+    // - Tested on Linux (Ubuntu 22.04), macOS (Ventura 13.2), and Windows (10).
+    "terminal.integrated.env.windows": {
+        "PATH": "${env:USERPROFILE}\\zephyrproject\\zephyr\\scripts;${env:PATH}",
+        "ZEPHYR_BASE": "${env:USERPROFILE}\\zephyrproject\\zephyr",
+        // "ZEPHYR_EXTRA_MODULES": "${workspaceFolder}",
+    },
+    "cortex-debug.gdbPath": "gdb-multiarch",
+	  // Hush CMake
+		"cmake.configureOnOpen": false,
+
+		// IntelliSense
+		"C_Cpp.default.compilerPath": "${userHome}/zephyr-sdk-0.16.1/arm-zephyr-eabi/bin/arm-zephyr-eabi-gcc.exe",
+		"C_Cpp.default.compileCommands": "${workspaceFolder}/build/compile_commands.json",
+
+		// File Associations
+		"files.associations": {
+            "device.h": "c"
+        },
+}

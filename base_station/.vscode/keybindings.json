@@ -1,0 +1,6 @@
+{
+  "key": "ctrl+k+1",
+  "command": "workbench.action.tasks.runTask",
+  "args": "West Build"
+
+}
