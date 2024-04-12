@@ -1,0 +1,38 @@
+/*
+ * Copyright (c) 2022 Mr. Green's Workshop https://www.MrGreensWorkshop.com
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ */
+// Tested on macOS, it should also work on Linux.
+{
+  "version": "0.2.0",
+  "showDevDebugOutput": "raw",
+  "configurations": [{
+    "name": "Pico Zephyr Debug",
+    "device": "RP2040",
+    "cwd": "${workspaceRoot}",
+    "executable": "build/zephyr/zephyr.elf",
+    "gdbPath": "arm-none-eabi-gdb",
+    "request": "launch",
+    "type": "cortex-debug",
+    "servertype": "openocd",
+    "configFiles": [
+      "interface/cmsis-dap.cfg",
+      "/target/rp2040.cfg"
+    ],
+    "searchDir": ["${env:HOME}/openocd/tcl"],
+// for freestanding apps
+    "svdFile": "${env:HOME}/zephyrproject/modules/hal/rpi_pico/src/rp2040/hardware_regs/rp2040.svd",
+// for workspace apps
+    // "svdFile": "${workspaceRoot}/../modules/hal/rpi_pico/src/rp2040/hardware_regs/rp2040.svd",
+    "runToEntryPoint": "main",
+    "openOCDLaunchCommands": [
+          "adapter speed 5000"
+        ],
+    "postRestartCommands": [
+      "break main",
+      "continue"
+    ]
+  },
+]
+}

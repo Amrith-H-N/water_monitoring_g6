@@ -1,0 +1,127 @@
+{
+	"folders": [
+		{
+			"path": "."
+		}
+	],
+	"settings": {
+		// Hush CMake
+		"cmake.configureOnOpen": false,
+
+		// IntelliSense
+		"C_Cpp.default.compilerPath": "${userHome}/zephyr-sdk-0.16.1/arm-zephyr-eabi/bin/arm-zephyr-eabi-gcc",
+		"C_Cpp.default.compileCommands": "${workspaceFolder}/build/compile_commands.json",
+
+		// File Associations
+		"files.associations": {}
+	},
+	"tasks": {
+		"version": "2.0.0",
+		"tasks": [
+			{
+				"label": "West Build",
+				"type": "shell",
+				"group": {
+					"kind": "build",
+					"isDefault": true
+				},
+				"command": "${userHome}/zephyrproject/.venv/Scripts/west",
+				"args": [
+					"build",
+					"-p",
+					"auto",
+					"-b",
+					"nrf52840dk_nrf52840"
+				],
+				"problemMatcher": [
+					"$gcc"
+				],
+			},
+			{
+				"label": "West Configurable Build",
+				"type": "shell",
+				"group": {
+					"kind": "build",
+				},
+				"command": "${userHome}/zephyrproject/.venv/Scripts/west",
+				"args": [
+					"build",
+					"-p",
+					"${input:pristine}",
+					"-b",
+					"${input:board}"
+				],
+				"problemMatcher": [
+					"$gcc"
+				]
+			},
+			{
+				"label": "West Flash",
+				"type": "shell",
+				"command": "${userHome}/zephyrproject/.venv/Scripts/west",
+				"args": [
+					"flash"
+				],
+				"problemMatcher": [
+					"$gcc"
+				]
+			}
+		],
+		"inputs": [
+			{
+				"id": "board",
+				"type": "promptString",
+				"default": "RP2040",
+				"description": "See https://docs.zephyrproject.org/latest/boards/index.html"
+			},
+			{
+				"id": "pristine",
+				"type": "pickString",
+				"description": "Choose when to run a pristine build",
+				"default": "auto",
+				"options": [
+					"auto",
+					"always",
+					"never"
+				]
+			}
+		]
+	},
+	"launch": {
+		"version": "0.2.0",
+  "configurations": [{
+    "name": "Pico Zephyr Debug",
+    "device": "RP2040",
+    "gdbPath": "arm-none-eabi-gdb",
+    "cwd": "${workspaceRoot}",
+    "executable": "build/zephyr/zephyr.elf",
+    "request": "launch",
+    "type": "cortex-debug",
+    "servertype": "openocd",
+    "configFiles": [
+      "/interface/picoprobe.cfg",
+      "/target/rp2040.cfg"
+    ],
+    "searchDir": ["${env:HOME}/openocd/tcl"],
+// for freestanding apps
+    "svdFile": "${env:HOME}/zephyrproject/modules/hal/rpi_pico/src/rp2040/hardware_regs/rp2040.svd",
+// for workspace apps
+    // "svdFile": "${workspaceRoot}/../modules/hal/rpi_pico/src/rp2040/hardware_regs/rp2040.svd",
+    "runToEntryPoint": "main",
+    "postRestartCommands": [
+      "break main",
+      "continue"
+    ]
+  }],
+	},
+	"extensions": {
+		"recommendations": [
+			"ms-vscode.cpptools-extension-pack",
+			"ms-python.python",
+			"ms-vscode.vscode-embedded-tools",
+			"ms-vscode.vscode-serial-monitor",
+			"marus25.cortex-debug",
+			"donjayamanne.python-environment-manager"
+		]
+	}
+}
