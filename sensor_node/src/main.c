@@ -11,22 +11,25 @@
 #include <zephyr/drivers/uart.h>
 #include <zephyr/kernel.h>
 
-// static const struct device *const uart_dev = DEVICE_DT_GET(UART_DEVICE_NODE);
+const struct device *uart_tx_dev;
+const struct device *uart_rx_dev;
 
-/*
- * Print a null-terminated string character by character to the UART interface
- */
-void print_uart(char *buf) {
-  int msg_len = strlen(buf);
+void main(void) {
+    uart_tx_dev = DEVICE_DT_GET(DT_NODELABEL(uart0));
+    uart_rx_dev = DEVICE_DT_GET(DT_NODELABEL(uart1));
 
-  for (int i = 0; i < msg_len; i++) {
-    uart_poll_out(uart_dev, buf[i]);
-  }
-}
+    while (1) {
+        // Transmit data to the base station using UART0
+        int sensor_data = read_sensor();
+        uart_tx(uart_tx_dev, (uint8_t *)&sensor_data, sizeof(sensor_data), SYS_FOREVER_MS);
 
-int main(void) {
-  while (1) {
-  }
+        // Receive data from the base station using UART1
+        int command_data;
+        uart_rx(uart_rx_dev, (uint8_t *)&command_data, sizeof(command_data), SYS_FOREVER_MS);
 
-  return 0;
+        // Process the received command data
+        process_command(command_data);
+
+        k_msleep(1000);
+    }
 }
