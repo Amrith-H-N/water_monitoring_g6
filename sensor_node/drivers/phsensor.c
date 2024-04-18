@@ -1,3 +1,6 @@
+
+// https://medium.com/home-wireless/reading-analog-data-in-zephyr-with-a-nrf52840-e05dae326b9b
+
 #include "phsensor.h"
 
 #include <string.h>
