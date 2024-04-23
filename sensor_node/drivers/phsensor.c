@@ -6,7 +6,7 @@
 #include <string.h>
 #include <zephyr/drivers/adc.h>
 
-// Simple analog input method
+// Simple analog input methodg
 // this just reads a sample then waits then returns it
 
 // ADC Sampling Settings

@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-#define DT_DRV_COMPAT zeantec_jm101
+#define DT_DRV_COMPAT raspberry_rp2040
 
 #include <zephyr/device.h>
 #include <zephyr/devicetree.h>
@@ -12,8 +12,6 @@
 #include <zephyr/drivers/uart.h>
 #include <zephyr/kernel.h>
 #include <zephyr/logging/log.h>
-#include <zephyr/sys/byteorder.h>
-#include <zephyr/sys/util_macro.h>
 
 #include <app/drivers/sensor/jm101.h>
 
