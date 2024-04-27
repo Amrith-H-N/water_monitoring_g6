@@ -1,0 +1,18 @@
+
+/ {
+    &adc {
+        status = "okay";
+        #io-channel-cells = <1>;
+        /* Other ADC properties */
+
+        channel1: channel@0 {
+            reg = <0>;
+            label = "ADC1_CH1";
+        };
+
+        channel2: channel@1 {
+            reg = <1>;
+            label = "ADC1_CH2";
+        };
+    };
+};
