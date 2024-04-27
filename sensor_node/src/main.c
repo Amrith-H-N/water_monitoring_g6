@@ -1,9 +1,3 @@
-/*
- * Copyright (c) 2020 Libre Solar Technologies GmbH
- *
- * SPDX-License-Identifier: Apache-2.0
- */
-
 #include <inttypes.h>
 #include <stddef.h>
 #include <stdint.h>
@@ -16,6 +10,9 @@
 #include <zephyr/sys/printk.h>
 #include <zephyr/sys/util.h>
 
+#include "analogsensors.h"
+#include "ds18b20.h"
+
 #define LOG_MODULE_NAME SENSOR_NODE_APP
 
 /* 1000 msec = 1 sec */
@@ -26,27 +23,6 @@
 
 /* scheduling priority used by each thread */
 #define PRIORITY 7
-
-#if !DT_NODE_EXISTS(DT_PATH(zephyr_user)) || \
-    !DT_NODE_HAS_PROP(DT_PATH(zephyr_user), io_channels)
-#error "No suitable devicetree overlay specified"
-#endif
-
-#define DT_SPEC_AND_COMMA(node_id, prop, idx) \
-  ADC_DT_SPEC_GET_BY_IDX(node_id, idx),
-
-/* Data of ADC io-channels specified in devicetree. */
-static const struct adc_dt_spec adc_channels[] = {
-    DT_FOREACH_PROP_ELEM(DT_PATH(zephyr_user), io_channels, DT_SPEC_AND_COMMA)};
-
-int err;
-uint16_t buf;
-
-struct adc_sequence sequence = {
-    .buffer = &buf,
-    /* buffer size in bytes, not number of samples */
-    .buffer_size = sizeof(buf),
-};
 
 // semaphore for button task
 K_SEM_DEFINE(uart_sem, 0, 1);
@@ -67,21 +43,6 @@ static const struct device *const uart_dev = DEVICE_DT_GET(UART_DEVICE_NODE);
 /* receive buffer used in UART ISR callback */
 static char rx_buf[MSG_SIZE];
 static int rx_buf_pos = 0;
-
-static int read_buf_pos = 0;
-
-#define num_sensors 3
-
-enum cmd { get_turbidity = 'a', get_ph, get_pressure, get_all };
-
-typedef struct {
-  uint8_t id;
-  uint32_t reading;
-} sensor_t;
-
-sensor_t sensors[num_sensors] = {{.id = get_turbidity, .reading = 0},
-                                 {.id = get_ph, .reading = 0},
-                                 {.id = get_pressure, .reading = 0}};
 
 /*
 /*
@@ -139,62 +100,7 @@ void send_uart() {
   }
 }
 
-void read_adc() {
-  while (1) {
-    // printk("ADC reading:\n");
-    for (size_t i = 0U; i < ARRAY_SIZE(adc_channels); i++) {
-      int32_t val_mv;
-
-      // printk("- %s, channel %d: ", adc_channels[i].dev->name,
-      // adc_channels[i].channel_id);
-
-      (void)adc_sequence_init_dt(&adc_channels[i], &sequence);
-
-      err = adc_read_dt(&adc_channels[i], &sequence);
-      if (err < 0) {
-        // printk("Could not read (%d)\n", err);
-        continue;
-      }
-
-      /*
-       * If using differential mode, the 16 bit value
-       * in the ADC sample buffer should be a signed 2's
-       * complement value.
-       */
-      if (adc_channels[i].channel_cfg.differential) {
-        val_mv = (int32_t)((int16_t)buf);
-      } else {
-        sensors[i].reading = (int32_t)buf;
-      }
-      // printk("%" PRId32, val_mv);
-      err = adc_raw_to_millivolts_dt(&adc_channels[i], &val_mv);
-      /* conversion to mV may not be supported, skip if not */
-      if (err < 0) {
-        // printk(" (value in mV not available)\n");
-      } else {
-        // printk(" = %" PRId32 " mV\n", val_mv);
-      }
-    }
-
-    k_sleep(K_MSEC(1000));
-  }
-}
-
-int main(void) {
-  /* Configure channels individually prior to sampling. */
-  for (size_t i = 0U; i < ARRAY_SIZE(adc_channels); i++) {
-    if (!adc_is_ready_dt(&adc_channels[i])) {
-      printk("ADC controller device %s not ready\n", adc_channels[i].dev->name);
-      return 0;
-    }
-
-    err = adc_channel_setup_dt(&adc_channels[i]);
-    if (err < 0) {
-      printk("Could not setup channel #%d (%d)\n", i, err);
-      return 0;
-    }
-  }
-
+int uart_init() {
   if (!device_is_ready(uart_dev)) {
     printk("UART device not found!");
     return 0;
@@ -214,10 +120,16 @@ int main(void) {
     return 0;
   }
   uart_irq_rx_enable(uart_dev);
+}
+
+int main(void) {
+  analog_sensors_init();
+  uart_init();
 
   return 0;
 }
 
 K_THREAD_DEFINE(send_uart_task, STACKSIZE, send_uart, NULL, NULL, NULL, 0, 0,
                 0);
+// reads turbidity and ph values at the same time
 K_THREAD_DEFINE(read_adc_task, STACKSIZE, read_adc, NULL, NULL, NULL, 0, 0, 0);
