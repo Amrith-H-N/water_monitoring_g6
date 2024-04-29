@@ -30,9 +30,9 @@ struct ring_buf uart0_rx_ring_buf;
 
 /* Function prototypes */
 void uart0_isr(const struct device *dev, void *user_data);
-int fetch_channel(uint8_t channel);
+int fetch_channel(const struct device *dev, uint8_t channel, uint8_t *value);
 int get_channel_value(uint8_t channel);
-int init_sensors(void);
+int sensor_init(const struct device *dev);
 
 /* UART0 interrupt service routine */
 void uart0_isr(const struct device *dev, void *user_data)
@@ -45,20 +45,27 @@ void uart0_isr(const struct device *dev, void *user_data)
 }
 
 /* Fetch the requested channel value */
-int fetch_channel(uint8_t channel)
+int fetch_channel(const struct device *dev, uint8_t channel, uint8_t *value)
 {
     int ret = 0;
 
     switch (channel) {
     case CMD_FETCH_PH_METER:
-        ret = get_channel_value(PH_METER_PIN);
+        *value = get_channel_value(PH_METER_PIN);
         break;
     case CMD_FETCH_TURBIDITY_SENSOR:
-        ret = get_channel_value(TURBIDITY_SENSOR_PIN);
+        *value = get_channel_value(TURBIDITY_SENSOR_PIN);
         break;
     default:
         ret = -1; /* Invalid channel */
         break;
+    }
+
+    if (ret == 0) {
+        uart_poll_out(UART0_DEVICE_NODE, &RESP_OK, 1);
+        uart_poll_out(UART0_DEVICE_NODE, value, 1);
+    } else {
+        uart_poll_out(UART0_DEVICE_NODE, &RESP_ERROR, 1);
     }
 
     return ret;
@@ -80,14 +87,13 @@ int get_channel_value(uint8_t channel)
     return value;
 }
 
-/* Initialize the sensors and configure the UARTs */
-int init_sensors(void)
+/* Initialize the sensor driver */
+int sensor_init(const struct device *dev)
 {
-    const struct device *uart0_dev;
     uart_irq_callback_set(UART0_DEVICE_NODE, uart0_isr);
 
     /* Configure UART0 for base station communication */
-    uart0_dev = device_get_binding(DT_LABEL(UART0_DEVICE_NODE));
+    const struct device *uart0_dev = device_get_binding(DT_LABEL(UART0_DEVICE_NODE));
     if (!uart0_dev) {
         return -1;
     }
@@ -108,32 +114,4 @@ int init_sensors(void)
     ring_buf_init(&uart0_rx_ring_buf, sizeof(uart0_rx_buffer), uart0_rx_buffer);
 
     return 0;
-}
-
-/* Main function */
-void main(void)
-{
-    uint8_t cmd, resp, value;
-
-    /* Initialize the sensors and UARTs */
-    if (init_sensors() != 0) {
-        return;
-    }
-
-    while (1) {
-        /* Check if a command is received on UART0 */
-        if (ring_buf_get(&uart0_rx_ring_buf, &cmd, 1) == 1) {
-            /* Process the command */
-            value = fetch_channel(cmd);
-
-            if (value >= 0) {
-                resp = RESP_OK;
-                uart_poll_out(UART0_DEVICE_NODE, &resp, 1);
-                uart_poll_out(UART0_DEVICE_NODE, &value, 1);
-            } else {
-                resp = RESP_ERROR;
-                uart_poll_out(UART0_DEVICE_NODE, &resp, 1);
-            }
-        }
-    }
 }
