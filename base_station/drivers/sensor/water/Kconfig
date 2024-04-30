@@ -39,7 +39,7 @@ config WATER_TEMP_OVER_8X
 config WATER_TEMP_OVER_16X
 	bool "x16"
 endchoice
-
+.
 choice
 	prompt "WATER resolution"
 	default WATER_TEMP_OVER_2X
