@@ -4,6 +4,6 @@
 description: |
    Sensor node raspberry pi pico
 
-compatible: "raspberry,rp2040"
+compatible: "water"
 
 include: base.yaml
