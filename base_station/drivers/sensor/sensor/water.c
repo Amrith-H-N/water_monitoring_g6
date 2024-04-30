@@ -32,7 +32,7 @@ struct ring_buf uart0_rx_ring_buf;
 void uart0_isr(const struct device *dev, void *user_data);
 int fetch_channel(const struct device *dev, uint8_t channel, uint8_t *value);
 int get_channel_value(uint8_t channel);
-int sensor_init(const struct device *dev);
+int water_init(const struct device *dev);
 
 /* UART0 interrupt service routine */
 void uart0_isr(const struct device *dev, void *user_data)
@@ -88,7 +88,7 @@ int get_channel_value(uint8_t channel)
 }
 
 /* Initialize the sensor driver */
-int sensor_init(const struct device *dev)
+int water_init(const struct device *dev)
 {
     uart_irq_callback_set(UART0_DEVICE_NODE, uart0_isr);
 
