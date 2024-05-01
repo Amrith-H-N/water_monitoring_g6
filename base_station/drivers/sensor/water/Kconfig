@@ -42,7 +42,7 @@ endchoice
 .
 choice
 	prompt "WATER resolution"
-	default WATER_TEMP_OVER_2X
+	default WATER_RES_1X
 	help
 	  Select resolution for the WATER sensor.  Higher values
 	  lead to more accurate readings, but higher power consumption.
