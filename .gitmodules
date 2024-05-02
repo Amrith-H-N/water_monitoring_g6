@@ -1,0 +1,3 @@
+[submodule "base_station_node"]
+	path = base_station_node
+	url = https://github.com/Amrith-H-N/water_monitoring_g6_base_station

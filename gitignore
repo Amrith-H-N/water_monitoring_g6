@@ -1,0 +1,11 @@
+# editors
+.vscode
+*.swp
+*~
+
+# python
+.venv
+
+# build
+base_station/build*
+sensor_node/buid*
