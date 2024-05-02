@@ -88,6 +88,7 @@ int get_channel_value(uint8_t channel)
 }
 
 /* Initialize the sensor driver */
+/* Initialize the base station driver */
 int water_init(const struct device *dev)
 {
     uart_irq_callback_set(UART0_DEVICE_NODE, uart0_isr);
@@ -103,12 +104,6 @@ int water_init(const struct device *dev)
     if (!uart1_dev) {
         return -1;
     }
-
-    /* Configure the GPIO pins for sensor data */
-    gpio_pin_configure(device_get_binding(DT_GPIO_LABEL(DT_NODELABEL(ph_meter), gpios)),
-                       PH_METER_PIN, GPIO_INPUT | PH_METER_FLAGS);
-    gpio_pin_configure(device_get_binding(DT_GPIO_LABEL(DT_NODELABEL(turbidity_sensor), gpios)),
-                       TURBIDITY_SENSOR_PIN, GPIO_INPUT | TURBIDITY_SENSOR_FLAGS);
 
     /* Initialize the ring buffer for UART0 data */
     ring_buf_init(&uart0_rx_ring_buf, sizeof(uart0_rx_buffer), uart0_rx_buffer);
