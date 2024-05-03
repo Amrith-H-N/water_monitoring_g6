@@ -1,6 +1,26 @@
 
 #include "analogsensors.h"
 
+/**
+ * @defgroup drivers Drivers
+ * @{
+ *
+ * @brief This is a group of all driver-related code.
+ *
+ * This group contains all the driver classes, functions, and variables.
+ * It's a central place to find everything related to drivers in this project.
+ */
+
+/**
+ * @defgroup drivers_analog drivers
+ * @ingroup drivers
+ * @{
+ *
+ * @brief A custom driver for Water monitoring sensor
+ *
+ *
+ *
+ */
 sensor_t sensors[num_sensors] = {{.id = get_turbidity, .reading = 0},
                                  {.id = get_ph, .reading = 0},
                                  {.id = get_pressure, .reading = 0}};
@@ -26,27 +46,46 @@ struct adc_sequence sequence = {
     .buffer_size = sizeof(buf),
 };
 
-int analog_sensors_init() {
+/**
+ * @brief Initilises both analog sensors
+ *
+ *  @return int 0 if failure
+ */
+int analog_sensors_init()
+{
   /* Configure channels individually prior to sampling. */
 
-  for (size_t i = 0U; i < ARRAY_SIZE(adc_channels); i++) {
-    if (!adc_is_ready_dt(&adc_channels[i])) {
+  for (size_t i = 0U; i < ARRAY_SIZE(adc_channels); i++)
+  {
+    if (!adc_is_ready_dt(&adc_channels[i]))
+    {
       printk("ADC controller device %s not ready\n", adc_channels[i].dev->name);
       return 0;
     }
 
     err = adc_channel_setup_dt(&adc_channels[i]);
-    if (err < 0) {
+    if (err < 0)
+    {
       printk("Could not setup channel #%d (%d)\n", i, err);
       return 0;
     }
   }
 }
 
-void read_adc() {
-  while (1) {
+/**
+ * @brief read adc function reads the adc from two channels
+ *
+ *
+ *
+ *  @return none
+ */
+void read_adc()
+{
+  while (1)
+  {
     // printk("ADC reading:\n");
-    for (size_t i = 0U; i < ARRAY_SIZE(adc_channels); i++) {
+    for (size_t i = 0U; i < ARRAY_SIZE(adc_channels); i++)
+    {
       int32_t val_mv;
 
       // printk("- %s, channel %d: ", adc_channels[i].dev->name,
@@ -55,7 +94,8 @@ void read_adc() {
       (void)adc_sequence_init_dt(&adc_channels[i], &sequence);
 
       err = adc_read_dt(&adc_channels[i], &sequence);
-      if (err < 0) {
+      if (err < 0)
+      {
         // printk("Could not read (%d)\n", err);
         continue;
       }
@@ -65,17 +105,23 @@ void read_adc() {
        * in the ADC sample buffer should be a signed 2's
        * complement value.
        */
-      if (adc_channels[i].channel_cfg.differential) {
+      if (adc_channels[i].channel_cfg.differential)
+      {
         val_mv = (int32_t)((int16_t)buf);
-      } else {
+      }
+      else
+      {
         sensors[i].reading = (int32_t)buf;
       }
       // printk("%" PRId32, val_mv);
       err = adc_raw_to_millivolts_dt(&adc_channels[i], &val_mv);
       /* conversion to mV may not be supported, skip if not */
-      if (err < 0) {
+      if (err < 0)
+      {
         // printk(" (value in mV not available)\n");
-      } else {
+      }
+      else
+      {
         // printk(" = %" PRId32 " mV\n", val_mv);
       }
     }
@@ -83,3 +129,6 @@ void read_adc() {
     k_sleep(K_MSEC(1000));
   }
 }
+
+/** @} */
+/** @} */

@@ -1,0 +1,16 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygenindex xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="index.xsd" version="1.9.8" xml:lang="en-US">
+  <compound refid="water_8h" kind="file"><name>water.h</name>
+    <member refid="water_8h_1ad240d323f49351916fe749d502fc0ac3" kind="enum"><name>water_channel</name></member>
+    <member refid="water_8h_1ad240d323f49351916fe749d502fc0ac3a33027f250e7bc587b7f777d012eaf808" kind="enumvalue"><name>WATER_CHAN_PH</name></member>
+    <member refid="water_8h_1ad240d323f49351916fe749d502fc0ac3abbf412ec7368c24aa8a75bee610dd140" kind="enumvalue"><name>WATER_CHAN_TURB</name></member>
+    <member refid="water_8h_1ad240d323f49351916fe749d502fc0ac3a44fd4b6316b6145a32f009944a6340ba" kind="enumvalue"><name>WATER_CHAN_TEMP</name></member>
+    <member refid="water_8h_1ad240d323f49351916fe749d502fc0ac3a4a2394a145a30ac38e11969d892d3a29" kind="enumvalue"><name>WATER_CHAN_ALL</name></member>
+  </compound>
+  <compound refid="dir_d422163b96683743ed3963d4aac17747" kind="dir"><name>app</name>
+  </compound>
+  <compound refid="dir_e4cd3a4a9337495149c4bffc131d7a10" kind="dir"><name>app/drivers</name>
+  </compound>
+  <compound refid="dir_69474a263c7ff254fef0ed2ac7ab16db" kind="dir"><name>app/drivers/sensor</name>
+  </compound>
+</doxygenindex>

@@ -1,0 +1,12 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+  <compounddef id="dir_69474a263c7ff254fef0ed2ac7ab16db" kind="dir">
+    <compoundname>app/drivers/sensor</compoundname>
+    <innerfile refid="water_8h">water.h</innerfile>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="app/drivers/sensor/"/>
+  </compounddef>
+</doxygen>

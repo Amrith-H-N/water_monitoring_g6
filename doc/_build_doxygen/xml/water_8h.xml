@@ -1,0 +1,89 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+  <compounddef id="water_8h" kind="file" language="C++">
+    <compoundname>water.h</compoundname>
+    <includes local="no">zephyr/drivers/sensor.h</includes>
+    <incdepgraph>
+      <node id="1">
+        <label>app/drivers/sensor/water.h</label>
+        <link refid="water_8h"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>zephyr/drivers/sensor.h</label>
+      </node>
+    </incdepgraph>
+    <sectiondef kind="enum">
+      <memberdef kind="enum" id="water_8h_1ad240d323f49351916fe749d502fc0ac3" prot="public" static="no" strong="no">
+        <type></type>
+        <name>water_channel</name>
+        <enumvalue id="water_8h_1ad240d323f49351916fe749d502fc0ac3a33027f250e7bc587b7f777d012eaf808" prot="public">
+          <name>WATER_CHAN_PH</name>
+          <initializer>= SENSOR_CHAN_PRIV_START</initializer>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+<para>Fingerprint verification. </para>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="water_8h_1ad240d323f49351916fe749d502fc0ac3abbf412ec7368c24aa8a75bee610dd140" prot="public">
+          <name>WATER_CHAN_TURB</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="water_8h_1ad240d323f49351916fe749d502fc0ac3a44fd4b6316b6145a32f009944a6340ba" prot="public">
+          <name>WATER_CHAN_TEMP</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="water_8h_1ad240d323f49351916fe749d502fc0ac3a4a2394a145a30ac38e11969d892d3a29" prot="public">
+          <name>WATER_CHAN_ALL</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <briefdescription>
+<para>water_sensor custom channels. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="app/drivers/sensor/water.h" line="12" column="1" bodyfile="app/drivers/sensor/water.h" bodystart="13" bodyend="20"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <programlisting>
+<codeline lineno="1"><highlight class="comment">/*</highlight></codeline>
+<codeline lineno="2"><highlight class="comment"><sp/>*<sp/>Copyright<sp/>(c)<sp/>2022<sp/>Nordic<sp/>Semiconductor<sp/>ASA</highlight></codeline>
+<codeline lineno="3"><highlight class="comment"><sp/>*</highlight></codeline>
+<codeline lineno="4"><highlight class="comment"><sp/>*<sp/>SPDX-License-Identifier:<sp/>Apache-2.0</highlight></codeline>
+<codeline lineno="5"><highlight class="comment"><sp/>*/</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="6"><highlight class="normal"></highlight><highlight class="preprocessor">#ifndef<sp/>ZEPHYR_INCLUDE_ZEPHYR_DRIVERS_SENSOR_H_</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="7"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>ZEPHYR_INCLUDE_ZEPHYR_DRIVERS_SENSOR_H_</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="8"><highlight class="normal"></highlight></codeline>
+<codeline lineno="9"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;zephyr/drivers/sensor.h&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="10"><highlight class="normal"></highlight></codeline>
+<codeline lineno="12"><highlight class="normal"></highlight><highlight class="keyword">enum</highlight><highlight class="normal"><sp/>water_channel</highlight></codeline>
+<codeline lineno="13"><highlight class="normal">{</highlight></codeline>
+<codeline lineno="15"><highlight class="normal"><sp/><sp/>WATER_CHAN_PH<sp/>=<sp/>SENSOR_CHAN_PRIV_START,</highlight></codeline>
+<codeline lineno="16"><highlight class="normal"><sp/><sp/>WATER_CHAN_TURB,</highlight></codeline>
+<codeline lineno="17"><highlight class="normal"><sp/><sp/>WATER_CHAN_TEMP,</highlight></codeline>
+<codeline lineno="18"><highlight class="normal"><sp/><sp/>WATER_CHAN_ALL</highlight></codeline>
+<codeline lineno="19"><highlight class="normal"></highlight></codeline>
+<codeline lineno="20"><highlight class="normal">};</highlight></codeline>
+<codeline lineno="21"><highlight class="normal"></highlight></codeline>
+<codeline lineno="22"><highlight class="normal"></highlight><highlight class="preprocessor">#endif<sp/></highlight><highlight class="comment">/*<sp/>ZEPHYR_INCLUDE<sp/>*/</highlight><highlight class="preprocessor"></highlight></codeline>
+    </programlisting>
+    <location file="app/drivers/sensor/water.h"/>
+  </compounddef>
+</doxygen>

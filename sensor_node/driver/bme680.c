@@ -1,5 +1,25 @@
 #include "bme680.h"
 
+/**
+ * @defgroup drivers Drivers
+ * @{
+ *
+ * @brief This is a group of all driver-related code.
+ *
+ * This group contains all the driver classes, functions, and variables.
+ * It's a central place to find everything related to drivers in this project.
+ */
+
+/**
+ * @defgroup drivers_bme680 drivers
+ * @ingroup drivers
+ * @{
+ *
+ * @brief A custom driver for Water monitoring sensor
+ *
+ *
+ *
+ */
 /* Temperature calibration parameters */
 #define BME680_T1_LSB 0xE9
 #define BME680_T1_MSB 0xEA
@@ -18,7 +38,14 @@ uint16_t _t1 = 0;
 uint16_t _t2 = 0;
 uint16_t _t3 = 0;
 
-void get_temperature() {
+/**
+ * @brief gets the temperature from bme680
+ *
+ *
+ *  @return none
+ */
+void get_temperature()
+{
   // oversampling temperature setting
   volatile uint8_t temp = val | 1 << 0;
   i2c_reg_write_byte(i2c_dev, BME680_I2C_ADDR, BME680_CTRL_MEAS, temp);
@@ -61,8 +88,16 @@ void get_temperature() {
   printk("Temperature: %6.6f °C\n", (float)temp_comp / 100);
 }
 
-void config_sensor() {
-  if (!device_is_ready(i2c_dev)) {
+/**
+ * @brief configures bme680
+ *
+ *
+ *  @return none
+ */
+void config_sensor()
+{
+  if (!device_is_ready(i2c_dev))
+  {
     printk("I2C device not ready\n");
     return;
   }
@@ -93,3 +128,6 @@ void config_sensor() {
   volatile uint8_t temp = 0;
   i2c_reg_read_byte(i2c_dev, BME680_I2C_ADDR, BME680_CTRL_MEAS, &temp);
 }
+
+/** @} */
+/** @} */
