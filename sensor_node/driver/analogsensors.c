@@ -41,9 +41,9 @@ int err;
 uint16_t buf;
 
 struct adc_sequence sequence = {
-    .buffer = &buf,
+    &buf,
     /* buffer size in bytes, not number of samples */
-    .buffer_size = sizeof(buf),
+    sizeof(buf),
 };
 
 /**
