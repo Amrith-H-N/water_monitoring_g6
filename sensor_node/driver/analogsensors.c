@@ -21,9 +21,9 @@
  *
  *
  */
-sensor_t sensors[num_sensors] = {{.id = get_turbidity, .reading = 0},
-                                 {.id = get_ph, .reading = 0},
-                                 {.id = get_pressure, .reading = 0}};
+sensor_t sensors[num_sensors] = {{get_turbidity, 0},
+                                 {get_ph, 0},
+                                 {get_pressure, 0}};
 
 #if !DT_NODE_EXISTS(DT_PATH(zephyr_user)) || \
     !DT_NODE_HAS_PROP(DT_PATH(zephyr_user), io_channels)
