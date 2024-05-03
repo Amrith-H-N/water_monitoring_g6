@@ -77,7 +77,6 @@ int analog_sensors_init()
  *
  *
  *
- *  @return none
  */
 void read_adc()
 {

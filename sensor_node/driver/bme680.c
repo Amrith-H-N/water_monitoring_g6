@@ -42,7 +42,6 @@ uint16_t _t3 = 0;
  * @brief gets the temperature from bme680
  *
  *
- *  @return none
  */
 void get_temperature()
 {
@@ -92,7 +91,6 @@ void get_temperature()
  * @brief configures bme680
  *
  *
- *  @return none
  */
 void config_sensor()
 {
