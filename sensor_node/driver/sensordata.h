@@ -3,7 +3,7 @@
 
 #define num_sensors 3
 
-enum cmd { get_turbidity = 'a', get_ph, get_pressure, get_all };
+enum cmd { get_turbidity = '0', get_ph, get_pressure, get_all };
 
 typedef struct {
   uint8_t id;
