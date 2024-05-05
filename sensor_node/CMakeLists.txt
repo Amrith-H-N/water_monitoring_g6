@@ -7,4 +7,4 @@ project(button_prj)
 target_include_directories(app PRIVATE
     driver  # Only specify the drivers directory
 )
-target_sources(app PRIVATE src/main.c driver/ds18b20.c driver/analogsensors.c)
+target_sources(app PRIVATE src/main.c driver/bme680.c driver/analogsensors.c)

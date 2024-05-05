@@ -21,8 +21,6 @@
  *
  *
  */
-sensor_t sensors[num_sensors] = {
-    {get_turbidity, 0}, {get_ph, 0}, {get_pressure, 0}};
 
 #if !DT_NODE_EXISTS(DT_PATH(zephyr_user)) || \
     !DT_NODE_HAS_PROP(DT_PATH(zephyr_user), io_channels)
@@ -36,23 +34,66 @@ sensor_t sensors[num_sensors] = {
 static const struct adc_dt_spec adc_channels[] = {
     DT_FOREACH_PROP_ELEM(DT_PATH(zephyr_user), io_channels, DT_SPEC_AND_COMMA)};
 
-int err;
-uint16_t buf;
-
-struct adc_sequence sequence = {
-    &buf,
-    /* buffer size in bytes, not number of samples */
-    sizeof(buf),
-};
-
 /**
- * @brief Initilises both analog sensors
+ * @brief read adc function reads the adc from two channels
  *
- *  @return int 0 if failure
+ *
+ *
  */
-int analog_sensors_init() {
-  /* Configure channels individually prior to sampling. */
+void rd_adc(uint32_t *data) {
+  int err;
+  uint32_t count = 0;
+  uint16_t buf;
+  struct adc_sequence sequence = {
+      .buffer = &buf,
+      /* buffer size in bytes, not number of samples */
+      .buffer_size = sizeof(buf),
+  };
 
+  // printk("ADC reading[%u]:\n", count++);
+  for (size_t i = 0U; i < ARRAY_SIZE(adc_channels); i++) {
+    int32_t val_mv;
+
+    // printk("- %s, channel %d: ", adc_channels[i].dev->name,
+    //        adc_channels[i].channel_id);
+
+    (void)adc_sequence_init_dt(&adc_channels[i], &sequence);
+
+    err = adc_read_dt(&adc_channels[i], &sequence);
+    if (err < 0) {
+      printk("Could not read (%d)\n", err);
+      continue;
+    }
+
+    /*
+     * If using differential mode, the 16 bit value
+     * in the ADC sample buffer should be a signed 2's
+     * complement value.
+     */
+    if (adc_channels[i].channel_cfg.differential) {
+      val_mv = (int32_t)((int16_t)buf);
+    } else {
+      val_mv = (int32_t)buf;
+    }
+    // printk("%" PRId32, val_mv);
+    //  err = adc_raw_to_millivolts_dt(&adc_channels[i], &val_mv);
+    /* conversion to mV may not be supported, skip if not */
+    if (err < 0) {
+      // printk(" (value in mV not available)\n");
+    } else {
+      // printk(" = %" PRId32 " mV\n", val_mv);
+    }
+    data[i] = val_mv;
+    // printk("%d", val_mv);
+    // printk("%d", data[i]);
+  }
+
+  return 0;
+}
+
+void adcsensor_init() {
+  int err;
+  /* Configure channels individually prior to sampling. */
   for (size_t i = 0U; i < ARRAY_SIZE(adc_channels); i++) {
     if (!adc_is_ready_dt(&adc_channels[i])) {
       printk("ADC controller device %s not ready\n", adc_channels[i].dev->name);
@@ -64,53 +105,6 @@ int analog_sensors_init() {
       printk("Could not setup channel #%d (%d)\n", i, err);
       return 0;
     }
-  }
-}
-
-/**
- * @brief read adc function reads the adc from two channels
- *
- *
- *
- */
-void read_adc() {
-  while (1) {
-    printk("ADC reading:\n");
-    for (size_t i = 0U; i < ARRAY_SIZE(adc_channels); i++) {
-      int32_t val_mv;
-
-      printk("- %s, channel %d: ", adc_channels[i].dev->name,
-             adc_channels[i].channel_id);
-
-      (void)adc_sequence_init_dt(&adc_channels[i], &sequence);
-
-      err = adc_read_dt(&adc_channels[i], &sequence);
-      if (err < 0) {
-        printk("Could not read (%d)\n", err);
-        continue;
-      }
-
-      /*
-       * If using differential mode, the 16 bit value
-       * in the ADC sample buffer should be a signed 2's
-       * complement value.
-       */
-      if (adc_channels[i].channel_cfg.differential) {
-        val_mv = (int32_t)((int16_t)buf);
-      } else {
-        sensors[i].reading = (int32_t)buf;
-      }
-      // printk("value = %d", sensors[i].reading);
-      err = adc_raw_to_millivolts_dt(&adc_channels[i], &val_mv);
-      /* conversion to mV may not be supported, skip if not */
-      if (err < 0) {
-        printk(" (value in mV not available)\n");
-      } else {
-        printk(" = %" PRId32 " mV\n", val_mv);
-      }
-    }
-
-    k_sleep(K_MSEC(1000));
   }
 }
 

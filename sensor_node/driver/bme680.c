@@ -37,14 +37,12 @@ volatile uint8_t val = 0;
 uint16_t _t1 = 0;
 uint16_t _t2 = 0;
 uint16_t _t3 = 0;
-
 /**
  * @brief gets the temperature from bme680
  *
  *
  */
-void get_temperature()
-{
+int16_t get_temperature() {
   // oversampling temperature setting
   volatile uint8_t temp = val | 1 << 0;
   i2c_reg_write_byte(i2c_dev, BME680_I2C_ADDR, BME680_CTRL_MEAS, temp);
@@ -82,9 +80,11 @@ void get_temperature()
   volatile int64_t temp_fine = temp_var2 + temp_var3;
   // printk("###Temp_fine: %lld \n", temp_fine);
   volatile int16_t temp_comp = ((temp_fine * 5) + 128) >> 8;
+  // printk("Temperature: %d °C\n", temp_comp);
 
+  return temp_comp;
   /* Print the temperature */
-  printk("Temperature: %6.6f °C\n", (float)temp_comp / 100);
+  // printk("Temperature: %6.6f °C\n", (float)temp_comp / 100);
 }
 
 /**
@@ -92,10 +92,8 @@ void get_temperature()
  *
  *
  */
-void config_sensor()
-{
-  if (!device_is_ready(i2c_dev))
-  {
+void config_sensor() {
+  if (!device_is_ready(i2c_dev)) {
     printk("I2C device not ready\n");
     return;
   }

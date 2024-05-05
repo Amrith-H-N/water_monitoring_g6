@@ -63,7 +63,7 @@
 #define BME680_PRESS_MSB 0x1F
 #define BME680_EAS_STATUS_0 0x1D
 
-void get_temperature(void);
+int16_t get_temperature(void);
 void config_sensor(void);  // initialise and write config
 
-#elif
+#endif

@@ -13,9 +13,7 @@
 #include <zephyr/sys/printk.h>
 #include <zephyr/sys/util.h>
 
-#include "sensordata.h"
-
-int analog_sensors_init(void);
-void read_adc(void);
+void rd_adc(uint32_t *data);
+void adcsensor_init(void);
 
 #endif
