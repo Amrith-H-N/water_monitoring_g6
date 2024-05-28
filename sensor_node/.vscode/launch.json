@@ -12,7 +12,7 @@
     "device": "RP2040",
     "cwd": "${workspaceRoot}",
     "executable": "build/zephyr/zephyr.elf",
-    "gdbPath": "arm-none-eabi-gdb",
+    "gdbPath" : "arm-none-eabi-gdb",
     "request": "launch",
     "type": "cortex-debug",
     "servertype": "openocd",

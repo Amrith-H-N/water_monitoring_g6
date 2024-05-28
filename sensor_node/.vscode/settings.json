@@ -25,10 +25,6 @@
 
 		// File Associations
 		"files.associations": {
-            "device.h": "c",
-            "inttypes.h": "c",
-            "stddef.h": "c",
-            "w1_sensor.h": "c",
-            "limits": "c"
+            "device.h": "c"
         },
 }

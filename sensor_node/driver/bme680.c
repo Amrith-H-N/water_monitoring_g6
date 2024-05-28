@@ -101,7 +101,7 @@ void config_sensor() {
   /* Initialize the sensor */
   uint8_t chip_id;
   i2c_reg_read_byte(i2c_dev, BME680_I2C_ADDR, BME680_ID, &chip_id);
-  printk("id: %d \n", chip_id);
+  // printk("id: %d \n", chip_id);
 
   /* Soft Reset the sensor */
   i2c_reg_write_byte(i2c_dev, BME680_I2C_ADDR, BME680_RESET, 0xB6);
